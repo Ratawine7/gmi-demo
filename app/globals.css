@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gmi-darkblue: #141753;
+  --color-gmi-orange: #e17c22;
+}
+
+:root {
+  --background: #f5f9f6;
+  --foreground: #141753;
+}
+
+html {
+  scroll-behavior: smooth;
+}
