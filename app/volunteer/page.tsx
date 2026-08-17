@@ -68,7 +68,9 @@ function generateMembershipId(chapterName: string) {
   const cleanName = chapterName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 4).toUpperCase();
   const code = cleanName || 'GGVF';
   const year = new Date().getFullYear();
-  const serial = String(Math.floor(Math.random() * 900 + 100));
+  const hashBase = `${code}-${year}`;
+  const hash = hashBase.split('').reduce((total, char) => total + char.charCodeAt(0), 0);
+  const serial = String((hash % 900) + 100).padStart(3, '0');
   return `GGVF-${code}-${year}-${serial}`;
 }
 
@@ -77,7 +79,7 @@ export default function VolunteerPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [validationError, setValidationError] = useState('');
-  const [formData, setFormData] = useState<Record<string, any>>({
+  const [formData, setFormData] = useState({
     institutionName: 'Bolgatanga Technical University',
     campusFaculty: '',
     departmentProgram: '',
@@ -103,22 +105,22 @@ export default function VolunteerPage() {
     currentLevelYear: '',
     expectedGraduationYear: '',
     reasonJoin: '',
-    interests: [],
+    interests: [] as string[],
     otherInterest: '',
-    skills: [],
+    skills: [] as string[],
     otherSkill: '',
     leadershipPosition: '',
     leadershipDetails: '',
     volunteerAvailability: '',
-    preferredRoles: [],
-    communicationChannels: [],
+    preferredRoles: [] as string[],
+    communicationChannels: [] as string[],
     whatsappNumber: '',
     facebook: '',
     instagram: '',
     linkedIn: '',
     x: '',
     willingLeadership: '',
-    chapterBuildAreas: [],
+    chapterBuildAreas: [] as string[],
     futureChapterInterest: '',
     codeOfConduct: false,
     signature: '',
@@ -774,12 +776,12 @@ export default function VolunteerPage() {
                 onChange={(e) => setFormData((prev) => ({ ...prev, codeOfConduct: e.target.checked }))}
                 className="mt-1"
               />
-              I hereby apply to become a member of the GMI Global Vision Foundation. I understand that membership requires adherence to the organization's values, policies, and code of conduct. I agree to participate responsibly and uphold the vision and mission of the Foundation.
+              I hereby apply to become a member of the GMI Global Vision Foundation. I understand that membership requires adherence to the organization&apos;s values, policies, and code of conduct. I agree to participate responsibly and uphold the vision and mission of the Foundation.
             </label>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <label className="space-y-1.5 text-xs font-semibold text-[#141753]">
-                <span>Applicant's Signature</span>
+                <span>Applicant&apos;s Signature</span>
                 <input
                   type="text"
                   value={formData.signature}
@@ -892,16 +894,16 @@ export default function VolunteerPage() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const missingFieldMap: Record<string, { step: number; label: string }> = {
-      institutionName: { step: 0, label: 'Institution Name' },
-      fullName: { step: 1, label: 'Full Name' },
-      phoneNumber: { step: 1, label: 'Phone Number' },
-      emailAddress: { step: 1, label: 'Email Address' },
-      reasonJoin: { step: 3, label: 'Why do you want to join GMI Global Vision Foundation?' },
-      codeOfConduct: { step: 8, label: 'Code of conduct agreement' },
-    };
+    const missingFieldEntries: Array<[keyof typeof formData, { step: number; label: string }]> = [
+      ['institutionName', { step: 0, label: 'Institution Name' }],
+      ['fullName', { step: 1, label: 'Full Name' }],
+      ['phoneNumber', { step: 1, label: 'Phone Number' }],
+      ['emailAddress', { step: 1, label: 'Email Address' }],
+      ['reasonJoin', { step: 3, label: 'Why do you want to join GMI Global Vision Foundation?' }],
+      ['codeOfConduct', { step: 8, label: 'Code of conduct agreement' }],
+    ];
 
-    for (const [field, metadata] of Object.entries(missingFieldMap)) {
+    for (const [field, metadata] of missingFieldEntries) {
       const value = formData[field];
       const empty = typeof value === 'boolean' ? !value : !String(value ?? '').trim();
       if (empty) {
@@ -922,21 +924,21 @@ export default function VolunteerPage() {
   };
 
   return (
-    <div className="w-full bg-[#f5f9f6] pb-24">
-      <section className="relative bg-[#141753] text-white py-20 text-center overflow-hidden">
+    <div className="w-full bg-[#f5f9f6] pb-16 sm:pb-24">
+      <section className="relative overflow-hidden bg-[#141753] py-16 text-center text-white sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#141753] via-slate-900 to-[#141753] opacity-85" />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 space-y-4">
+        <div className="relative z-10 mx-auto max-w-4xl space-y-4 px-4 sm:px-6">
           <span className="text-xs font-bold text-[#e17c22] tracking-widest uppercase block">Membership Registration</span>
-          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">GMI Global Vision Foundation</h1>
+          <h1 className="text-3xl font-black uppercase tracking-tight text-white sm:text-5xl">GMI Global Vision Foundation</h1>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl mx-auto">
             Students membership registration framework designed for Bolgatanga Technical University and future chapters.
           </p>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-6 pt-12">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8">
-          <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+      <section className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-md sm:p-8">
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-[#141753] rounded-lg text-white">
                 <BadgeCheck className="w-5 h-5" />
@@ -947,14 +949,14 @@ export default function VolunteerPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+            <div className="flex items-center gap-2 self-start text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
               <span>{currentStep + 1}</span>
               <span>/</span>
               <span>{steps.length}</span>
             </div>
           </div>
 
-          <div className="mb-8 flex flex-wrap gap-2">
+          <div className="-mx-1 mb-8 flex gap-2 overflow-x-auto px-1 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             {steps.map((step, index) => {
               const isActive = index === currentStep;
               const isDone = index < currentStep;
@@ -965,7 +967,7 @@ export default function VolunteerPage() {
                   key={step.title}
                   type="button"
                   onClick={() => setCurrentStep(index)}
-                  className={`flex items-center gap-2 rounded-full border px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] transition ${
+                  className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] transition ${
                     isActive
                       ? 'border-[#e17c22] bg-[#fff4eb] text-[#141753]'
                       : isDone
@@ -996,12 +998,12 @@ export default function VolunteerPage() {
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-5">{currentSection.content}</div>
 
-            <div className="flex justify-between gap-4 border-t border-slate-200 pt-6">
+            <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-between sm:gap-4">
               <button
                 type="button"
                 onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 0))}
                 disabled={currentStep === 0}
-                className="rounded-lg border border-slate-200 bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#141753] transition hover:border-[#e17c22] disabled:cursor-not-allowed disabled:opacity-40"
+                className="w-full rounded-lg border border-slate-200 bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#141753] transition hover:border-[#e17c22] disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
               >
                 Back
               </button>
@@ -1010,14 +1012,14 @@ export default function VolunteerPage() {
                 <button
                   type="button"
                   onClick={() => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))}
-                  className="bg-[#e17c22] hover:bg-orange-600 text-white text-xs font-bold uppercase tracking-wider px-8 py-3.5 rounded shadow-md transition"
+                  className="w-full rounded bg-[#e17c22] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 sm:w-auto"
                 >
                   Next
                 </button>
               ) : (
                 <button
                   type="submit"
-                  className="bg-[#e17c22] hover:bg-orange-600 text-white text-xs font-bold uppercase tracking-wider px-8 py-3.5 rounded shadow-md transition"
+                  className="w-full rounded bg-[#e17c22] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 sm:w-auto"
                 >
                   Submit
                 </button>

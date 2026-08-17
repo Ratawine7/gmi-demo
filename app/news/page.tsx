@@ -3,7 +3,6 @@
 
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Calendar, User, ArrowRight, Bookmark } from 'lucide-react';
 
 export default function NewsPage() {
@@ -39,14 +38,14 @@ export default function NewsPage() {
   ];
 
   return (
-    <div className="w-full bg-[#f5f9f6] pb-24">
+    <div className="w-full bg-[#f5f9f6] pb-16 sm:pb-24">
       
       {/* 1. HERO BANNER HEADER */}
-      <section className="relative bg-[#141753] text-white py-20 text-center overflow-hidden">
+      <section className="relative overflow-hidden bg-[#141753] py-16 text-center text-white sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#141753] via-slate-900 to-[#141753] opacity-85" />
-        <div className="relative z-10 max-w-3xl mx-auto px-6 space-y-4">
+        <div className="relative z-10 mx-auto max-w-3xl space-y-4 px-4 sm:px-6">
           <span className="text-xs font-bold text-[#e17c22] tracking-widest uppercase block">Updates from the Field</span>
-          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">Latest News</h1>
+          <h1 className="text-3xl font-black uppercase tracking-tight text-white sm:text-5xl">Latest News</h1>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
             Stay informed on our grassroots operations, structural policy commitments, and the lives changed across Ghana.
           </p>
@@ -54,7 +53,7 @@ export default function NewsPage() {
       </section>
 
       {/* 2. MAIN NEWS GRID */}
-      <section className="max-w-6xl mx-auto px-6 pt-16">
+      <section className="mx-auto max-w-6xl px-4 pt-12 sm:px-6 sm:pt-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((post, index) => (
             <article 
@@ -77,10 +76,10 @@ export default function NewsPage() {
               </div>
 
               {/* Card Body Content */}
-              <div className="p-6 flex flex-col flex-grow space-y-3">
+              <div className="flex flex-grow flex-col space-y-3 p-5 sm:p-6">
                 
                 {/* Metadata Row */}
-                <div className="flex items-center gap-4 text-[11px] text-slate-400 font-medium">
+                <div className="flex flex-wrap items-center gap-3 text-[11px] font-medium text-slate-400">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-[#e17c22]" /> {post.date}
                   </span>

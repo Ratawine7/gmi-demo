@@ -10,52 +10,88 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About Us" },
+    { href: "/#programs", label: "Our Programs" },
+    { href: "/news", label: "News" },
+    { href: "/partner", label: "Partner With Us" },
+    { href: "/volunteer", label: "Volunteer" },
+  ];
+
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className="bg-[#f5f9f6] text-[#141753] min-h-screen flex flex-col antialiased font-sans" suppressHydrationWarning>
-        
+
         {/* Navigation Header */}
         <header className="bg-[#141753] text-white shadow-md relative z-50">
-          <div className="max-w-6xl mx-auto px-6 h-24 flex items-center justify-between">
-            
-            {/* Hanging Circular Logo Placement */}
-            <Link href="/" className="relative z-50 -mb-10 block bg-[#141753] p-1.5 rounded-full border border-slate-700 shadow-xl">
-              <div className="w-20 h-20 rounded-full overflow-hidden bg-white relative flex items-center justify-center">
-                <Image 
-                  src="/gmi-logo.jpeg" 
-                  alt="GMI Logo" 
-                  fill
-                  className="object-contain p-1"
-                  priority
-                />
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 lg:py-0">
+            <div className="flex min-h-20 lg:h-24 items-center justify-between gap-4">
+              <Link
+                href="/"
+                className="relative z-50 -mb-4 sm:-mb-6 lg:-mb-10 block shrink-0 bg-[#141753] p-1.5 rounded-full border border-slate-700 shadow-xl"
+              >
+                <div className="w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] lg:w-20 lg:h-20 rounded-full overflow-hidden bg-white relative flex items-center justify-center">
+                  <Image
+                    src="/gmi-logo.jpeg"
+                    alt="GMI Logo"
+                    fill
+                    className="object-contain p-1"
+                    priority
+                  />
+                </div>
+              </Link>
+
+              <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8 text-xs font-semibold uppercase tracking-wider text-slate-300">
+                {navLinks.map((link) => (
+                  <Link key={link.href} href={link.href} className="hover:text-[#e17c22] transition">
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Link
+                  href="/donate"
+                  className="bg-[#e17c22] hover:bg-orange-600 text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 sm:px-5 py-2.5 rounded shadow-md transition"
+                >
+                  Donate
+                </Link>
+
+                <details className="mobile-nav lg:hidden">
+                  <summary className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded border border-slate-700 bg-slate-900/40 text-slate-100 transition hover:border-[#e17c22] hover:text-[#e17c22]">
+                    <span className="sr-only">Toggle navigation menu</span>
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5"
+                    >
+                      <path d="M4 7h16" />
+                      <path d="M4 12h16" />
+                      <path d="M4 17h16" />
+                    </svg>
+                  </summary>
+
+                  <nav className="absolute right-4 top-full mt-3 w-[min(18rem,calc(100vw-2rem))] rounded-2xl border border-slate-700 bg-[#141753] p-4 shadow-2xl sm:right-6 sm:w-72">
+                    <div className="flex flex-col gap-1">
+                      {navLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="rounded-lg px-3 py-3 text-sm font-semibold uppercase tracking-wider text-slate-200 transition hover:bg-slate-800 hover:text-[#e17c22]"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </nav>
+                </details>
               </div>
-            </Link>
-
-            {/* Fully Unified Navbar Menu Links */}
-            <nav className="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-300">
-              <Link href="/" className="hover:text-[#e17c22] transition">
-                Home
-              </Link>
-              <Link href="/about" className="hover:text-[#e17c22] transition">About Us</Link>
-              <Link href="/#programs" className="hover:text-[#e17c22] transition">
-                Our Programs
-              </Link>
-              <Link href="/news" className="hover:text-[#e17c22] transition">News</Link>
-              {/* BRAND NEW: Partner With Us Link Added */}
-              <Link href="/partner" className="hover:text-[#e17c22] transition tracking-wide">
-                Partner With Us
-              </Link>
-              {/* NEW: Volunteer Page Navigation added directly */}
-              <Link href="/volunteer" className="hover:text-[#e17c22] transition">
-                Volunteer
-              </Link>
-            </nav>
-
-            {/* Primary Global Call-To-Action Button */}
-            <div>
-              <Link href="/donate" className="bg-[#e17c22] hover:bg-orange-600 text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded shadow-md transition">
-                Donate
-              </Link>
             </div>
           </div>
         </header>

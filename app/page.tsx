@@ -30,7 +30,7 @@ export default function HomePage() {
     <div className="w-full">
       
       {/* SECTION 1: HERO BACKGROUND BANNER (WITH OPTIMIZED BACKGROUND IMAGE) */}
-      <section className="relative w-full min-h-[540px] bg-[#141753] text-white flex items-center justify-center overflow-hidden">
+      <section className="relative flex min-h-[460px] w-full items-center justify-center overflow-hidden bg-[#141753] text-white sm:min-h-[540px]">
         
         {/* Next.js Background Image Handler */}
         <Image 
@@ -43,14 +43,14 @@ export default function HomePage() {
         
         <div className="absolute inset-0 bg-gradient-to-b from-[#141753]/40 via-[#141753]/80 to-[#f5f9f6]" />
         
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-6">
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+        <div className="relative z-10 mx-auto max-w-4xl space-y-6 px-4 text-center sm:px-6">
+          <h1 className="text-3xl font-black leading-tight tracking-tight text-white drop-shadow-md sm:text-5xl">
             Awakening Consciences.<br />
             Transforming Lives.<br />
             Building Futures.
           </h1>
           <div className="pt-2">
-            <button className="bg-[#e17c22] hover:bg-orange-600 text-white text-xs font-bold uppercase tracking-wider px-8 py-3.5 rounded shadow-md transition">
+            <button className="rounded bg-[#e17c22] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 sm:px-8 sm:py-3.5">
               Learn More
             </button>
           </div>
@@ -58,13 +58,13 @@ export default function HomePage() {
       </section>
 
       {/* SECTION 2: CONTENT GRID */}
-      <section className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <section id="programs" className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-3 lg:gap-12">
         
         {/* LEFT COLUMN: IMPACT CARD SLOTS */}
         <div className="lg:col-span-2 space-y-12">
           <div className="text-center space-y-1.5">
             <span className="text-xs font-bold text-[#e17c22] tracking-widest uppercase block">Our Programs.</span>
-            <h2 className="text-3xl font-extrabold text-[#141753] tracking-tight">
+            <h2 className="text-2xl font-extrabold text-[#141753] tracking-tight sm:text-3xl">
               Our <span className="text-[#e17c22]">Impact Areas</span>
             </h2>
             <p className="text-slate-500 text-xs max-w-xl mx-auto leading-relaxed pt-1">
@@ -72,7 +72,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+          <div className="grid grid-cols-1 gap-4 pt-4 sm:gap-6 md:grid-cols-3">
             {programs.map((program, index) => (
               <ProjectCard 
                 key={index}
@@ -86,7 +86,7 @@ export default function HomePage() {
         </div>
 
         {/* RIGHT COLUMN: RE-STYLED PROFESSIONAL NEWS SIDEBAR */}
-        <div className="space-y-10 lg:border-l lg:border-slate-200 lg:pl-8">
+        <div className="space-y-8 lg:border-l lg:border-slate-200 lg:pl-8">
           
           <div className="space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-[#141753] border-b border-slate-200 pb-2">
@@ -96,7 +96,7 @@ export default function HomePage() {
             <div className="space-y-4">
               
               {/* News Item 1 */}
-              <div className="flex items-center gap-3 group cursor-pointer">
+              <div className="group flex items-start gap-3 cursor-pointer">
                 <div className="w-16 h-16 rounded overflow-hidden relative bg-slate-100 border border-slate-200/60 flex-shrink-0">
                   <Image 
                     src="/news1.jpg" 
@@ -105,7 +105,7 @@ export default function HomePage() {
                     className="object-cover group-hover:scale-105 transition duration-300"
                   />
                 </div>
-                <div className="space-y-1">
+                <div className="min-w-0 space-y-1">
                   <h4 className="text-xs font-bold text-[#141753] group-hover:text-[#e17c22] transition line-clamp-2 leading-tight">
                     Awakening Consciences. Bringing Back Hopes.
                   </h4>
@@ -114,7 +114,7 @@ export default function HomePage() {
               </div>
 
               {/* News Item 2 */}
-              <div className="flex items-center gap-3 group cursor-pointer">
+              <div className="group flex items-start gap-3 cursor-pointer">
                 <div className="w-16 h-16 rounded overflow-hidden relative bg-slate-100 border border-slate-200/60 flex-shrink-0">
                   <Image 
                     src="/news2.jpg" 
@@ -123,7 +123,7 @@ export default function HomePage() {
                     className="object-cover group-hover:scale-105 transition duration-300"
                   />
                 </div>
-                <div className="space-y-1">
+                <div className="min-w-0 space-y-1">
                   <h4 className="text-xs font-bold text-[#141753] group-hover:text-[#e17c22] transition line-clamp-2 leading-tight">
                     Community Projects Bring Sustainability and Independence.
                   </h4>
@@ -139,9 +139,9 @@ export default function HomePage() {
           </div>
 
           {/* Donation Widget Form Box */}
-          <div id="donate" className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm space-y-4">
+          <div id="donate" className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="text-sm font-bold text-[#141753] tracking-tight">Direct Donation</h3>
-            <div className="space-y-2.5">
+            <form className="space-y-2.5">
               <input 
                 type="email" 
                 placeholder="Email" 
@@ -150,7 +150,7 @@ export default function HomePage() {
               <button className="w-full bg-[#e17c22] hover:bg-orange-600 text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded transition">
                 Donate
               </button>
-            </div>
+            </form>
           </div>
 
         </div>

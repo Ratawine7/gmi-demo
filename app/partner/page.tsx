@@ -16,14 +16,14 @@ export default function PartnerPage() {
   ];
 
   return (
-    <div className="w-full bg-[#f5f9f6] pb-24">
+    <div className="w-full bg-[#f5f9f6] pb-16 sm:pb-24">
       
       {/* 1. CINEMATIC HERO DISPLAY HEADLINE SECTION */}
-      <section className="relative bg-[#141753] text-white py-20 text-center overflow-hidden">
+      <section className="relative overflow-hidden bg-[#141753] py-16 text-center text-white sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#141753] via-slate-900 to-[#141753] opacity-85" />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 space-y-4">
+        <div className="relative z-10 mx-auto max-w-4xl space-y-4 px-4 sm:px-6">
           <span className="text-xs font-bold text-[#e17c22] tracking-widest uppercase block">Get Involved</span>
-          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">Partner With Us</h1>
+          <h1 className="text-3xl font-black uppercase tracking-tight text-white sm:text-5xl">Partner With Us</h1>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl mx-auto">
             Discover why it is important you should support our work and how you can get involved. Our mission depends largely on flexible financial and operational alliances.
           </p>
@@ -31,10 +31,10 @@ export default function PartnerPage() {
       </section>
 
       {/* 2. PRIMARY CONTENT NARRATIVE PANEL */}
-      <section className="max-w-6xl mx-auto px-6 pt-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <section className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-8 px-4 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-12 lg:gap-12">
         
         {/* TEXT PARAGRAPHS WRAPPER (8-Cols wide on large viewports) */}
-        <div className="lg:col-span-7 space-y-6 text-slate-600 text-xs sm:text-sm leading-relaxed">
+        <div className="space-y-6 text-xs leading-relaxed text-slate-600 sm:text-sm lg:col-span-7">
           <p className="text-sm font-semibold text-[#141753]">
             Support to GMI Global Vision Foundation is not just support to one organization, but to the greater population of under-privileged children, youth and women across Ghana and beyond Africa.
           </p>
@@ -52,7 +52,7 @@ export default function PartnerPage() {
           </p>
 
           {/* DUAL TARGET BLOCK SECTOR FIELDS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
+          <div className="grid grid-cols-1 gap-6 pt-6 sm:grid-cols-2">
             <div className="p-5 bg-white border border-slate-200/80 rounded-xl space-y-2.5">
               <Building2 className="w-5 h-5 text-[#e17c22]" />
               <h4 className="font-bold text-xs uppercase tracking-wider text-[#141753]">National Societies</h4>
@@ -71,7 +71,7 @@ export default function PartnerPage() {
         </div>
 
         {/* IMAGE SIDEBAR CONTAINER DISPLAY (5-Cols wide on large viewports) */}
-        <div className="lg:col-span-5 relative h-[360px] lg:h-[460px] w-full rounded-2xl overflow-hidden shadow-md bg-slate-200 border border-slate-200">
+        <div className="relative h-72 w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-md sm:h-96 lg:col-span-5 lg:h-[460px]">
           <Image 
             src="/partner-hero.jpg"
             alt="Collaborative work and partnerships across Africa"
@@ -83,12 +83,12 @@ export default function PartnerPage() {
       </section>
 
       {/* 3. CORE ARGUMENT AND BULLET LIST GRID SECTION */}
-      <section className="max-w-6xl mx-auto px-6 pt-24">
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 sm:p-12 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
+        <div className="grid grid-cols-1 items-start gap-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:grid-cols-12 lg:gap-12 lg:p-12">
           
           <div className="lg:col-span-5 space-y-4">
             <span className="text-xs font-bold text-[#e17c22] uppercase tracking-wider">Strategic Engagement</span>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#141753] tracking-tight leading-tight">
+            <h2 className="text-2xl font-black leading-tight tracking-tight text-[#141753] sm:text-3xl">
               Why Partner <br className="hidden lg:block"/>with Us?
             </h2>
             <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
@@ -112,7 +112,7 @@ export default function PartnerPage() {
       </section>
 
       {/* 4. CALL TO ACTION FORMS TRANSITION SPOT */}
-      <section className="max-w-4xl mx-auto px-6 pt-16 text-center space-y-4">
+      <section className="mx-auto max-w-4xl space-y-4 px-4 pt-12 text-center sm:px-6 sm:pt-16">
         <h3 className="font-bold text-sm sm:text-base text-[#141753]">Ready to align objectives with our team?</h3>
         <a 
           href="#query-form"

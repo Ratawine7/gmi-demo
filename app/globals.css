@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gmi-darkblue: #141753;
+  --whacolor-gmi-darkblue: #141753;
   --color-gmi-orange: #e17c22;
 }
 
@@ -12,4 +12,12 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+.mobile-nav summary::-webkit-details-marker {
+  display: none;
+}
+
+.mobile-nav summary {
+  list-style: none;
 }

@@ -1,7 +1,7 @@
 // src/app/about/page.tsx
 import React from 'react';
 import Image from 'next/image';
-import { ShieldCheck, Network, Users, ShieldAlert } from 'lucide-react';
+import { ShieldCheck, Network, Users } from 'lucide-react';
 
 export default function AboutPage() {
   // Structured Array for Pillars
@@ -36,14 +36,14 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="w-full bg-[#f5f9f6] pb-24">
+    <div className="w-full bg-[#f5f9f6] pb-16 sm:pb-24">
       
       {/* 1. SECTION HERO BANNER HEADER */}
-      <section className="relative bg-[#141753] text-white py-20 text-center overflow-hidden">
+      <section className="relative overflow-hidden bg-[#141753] py-16 text-center text-white sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#141753] via-slate-900 to-[#141753] opacity-85" />
-        <div className="relative z-10 max-w-3xl mx-auto px-6 space-y-4">
+        <div className="relative z-10 mx-auto max-w-3xl space-y-4 px-4 sm:px-6">
           <span className="text-xs font-bold text-[#e17c22] tracking-widest uppercase block">Who We Are</span>
-          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">About Our Foundation</h1>
+          <h1 className="text-3xl font-black uppercase tracking-tight text-white sm:text-5xl">About Our Foundation</h1>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
             Discover the values driving our field models and meet the organizational team structuring localized progress out of Bolgatanga, Ghana.
           </p>
@@ -51,7 +51,7 @@ export default function AboutPage() {
       </section>
 
       {/* 2. THREE-COLUMN PILLAR STRATEGY CARDS CONTAINER */}
-      <section className="max-w-6xl mx-auto px-6 pt-16">
+      <section className="mx-auto max-w-6xl px-4 pt-12 sm:px-6 sm:pt-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {pillars.map((pillar, index) => (
             <div key={index} className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3.5">
@@ -66,12 +66,12 @@ export default function AboutPage() {
       </section>
 
       {/* 3. ROSTER DISPLAY SYSTEM GRID CONTAINER */}
-      <section className="max-w-6xl mx-auto px-6 pt-24 space-y-12">
+      <section className="mx-auto max-w-6xl space-y-10 px-4 pt-16 sm:px-6 sm:pt-24 sm:space-y-12">
         
         {/* Component Header Block Titles */}
         <div className="text-center space-y-1.5">
           <span className="text-xs font-bold text-[#e17c22] tracking-widest uppercase block">Our Leadership</span>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#141753] tracking-tight">Meet Our Team</h2>
+          <h2 className="text-2xl font-black text-[#141753] tracking-tight sm:text-3xl">Meet Our Team</h2>
           <p className="text-slate-500 text-xs max-w-md mx-auto leading-normal">
             A dedicated collective of field specialists managing regional logistics and development directives.
           </p>
@@ -100,7 +100,7 @@ export default function AboutPage() {
 
               {/* Testimonial Quote paragraph parameters */}
               <p className="text-[11px] text-slate-400 italic leading-relaxed pt-3 border-t border-slate-100 mt-4 flex-grow">
-                "{member.quote}"
+                &ldquo;{member.quote}&rdquo;
               </p>
 
             </div>
