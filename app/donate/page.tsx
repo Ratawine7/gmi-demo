@@ -19,12 +19,12 @@ export default function DonatePage() {
       </section>
 
       {/* 2. CASE FOR SUPPORT LAYOUT COMPONENT */}
-      <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 pt-12 sm:px-6 sm:pt-16 lg:gap-12 md:grid-cols-2">
-        <div className="space-y-5">
+      <section className="mx-auto max-w-6xl space-y-10 px-4 pt-12 sm:px-6 sm:pt-16">
+        <div className="space-y-5 text-center max-w-3xl mx-auto">
           <div className="text-xs font-bold text-[#e17c22] uppercase tracking-widest">Our Mandate</div>
           <h2 className="text-2xl font-black text-[#141753] tracking-tight sm:text-3xl">Why Donate?</h2>
-          <div className="space-y-4 text-slate-600 text-xs sm:text-sm leading-relaxed">
-            <h4 className="font-bold text-[#141753] text-sm sm:text-base text-balance">
+          <div className="space-y-4 text-slate-600 text-xs sm:text-sm leading-relaxed text-left">
+            <h4 className="font-bold text-[#141753] text-sm sm:text-base text-balance text-center">
               For every penny you give to GMI, we make a measurable impact.
             </h4>
             <p>
@@ -37,13 +37,23 @@ export default function DonatePage() {
         </div>
 
         {/* Crisp Refactored Dynamic Image Framework Spot */}
-        <div className="relative h-64 overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-lg sm:h-[340px]">
-          <Image 
-            src="/news1.jpg" // Reuses your existing high-res downloaded campaign image asset
-            alt="Children supported by GMI Global Vision Foundation" 
-            fill
-            className="object-cover"
-          />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+          {[
+            { src: '/donate1.jpeg', alt: 'GMI Global Vision Foundation donation impact 1' },
+            { src: '/donate2.jpeg', alt: 'GMI Global Vision Foundation donation impact 2' },
+            { src: '/donate3.jpeg', alt: 'GMI Global Vision Foundation donation impact 3' },
+            { src: '/donate4.jpeg', alt: 'GMI Global Vision Foundation donation impact 4' },
+          ].map((image) => (
+            <div key={image.src} className="relative h-72 overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-lg sm:h-96">
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                sizes="(min-width: 640px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+          ))}
         </div>
       </section>
 
