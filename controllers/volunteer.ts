@@ -9,6 +9,7 @@ import {
   isValidEmail,
   ok,
 } from '@/lib/http';
+import { shouldRequireRecaptcha, verifyRecaptchaToken } from '@/lib/recaptcha';
 
 const STRING_FIELDS = [
   'institutionName',
@@ -79,6 +80,14 @@ function buildMembershipId(institutionName: string) {
 
 export async function registerVolunteer(req: Request, res: Response) {
   const body = getBody(req);
+
+  if (shouldRequireRecaptcha()) {
+    const captchaToken = typeof body.captchaToken === 'string' ? body.captchaToken : '';
+    const verified = await verifyRecaptchaToken(captchaToken);
+    if (!verified) {
+      return fail(res, 'Security verification failed. Please complete the captcha and try again.', 422);
+    }
+  }
 
   // Whitelist input so clients cannot set moderation fields such as membershipStatus.
   const payload: Record<string, unknown> = {};

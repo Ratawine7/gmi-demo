@@ -9,6 +9,7 @@ import {
   isValidEmail,
   ok,
 } from '@/lib/http';
+import { shouldRequireRecaptcha, verifyRecaptchaToken } from '@/lib/recaptcha';
 
 const SUBSCRIBER_STATUSES = ['active', 'unsubscribed'] as const;
 type SubscriberStatus = typeof SUBSCRIBER_STATUSES[number];
@@ -19,7 +20,14 @@ function isSubscriberStatus(value: string | undefined): value is SubscriberStatu
 
 export async function subscribe(req: Request, res: Response) {
   const body = getBody(req);
-  console.log('Subscriber request body:', body);
+
+  if (shouldRequireRecaptcha()) {
+    const captchaToken = typeof body.captchaToken === 'string' ? body.captchaToken : '';
+    const verified = await verifyRecaptchaToken(captchaToken);
+    if (!verified) {
+      return fail(res, 'Security verification failed. Please complete the captcha and try again.', 422);
+    }
+  }
 
   if (!isValidEmail(body.email)) {
     return fail(res, 'Please provide a valid email address.', 422);

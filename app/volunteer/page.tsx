@@ -3,6 +3,8 @@
 import React, { useMemo, useState } from 'react';
 import { User, Mail, Heart, Users2, ShieldCheck, CheckCircle2, BadgeCheck } from 'lucide-react';
 import { apiUrl } from '@/lib/apiClient';
+import { getRecaptchaSiteKey, shouldRequireRecaptcha } from '@/lib/recaptcha';
+import RecaptchaField from '@/components/RecaptchaField';
 
 const interestOptions = [
   'Leadership Development',
@@ -81,6 +83,9 @@ export default function VolunteerPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [validationError, setValidationError] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
+  const recaptchaEnabled = shouldRequireRecaptcha();
+  const recaptchaSiteKey = getRecaptchaSiteKey();
   const [formData, setFormData] = useState({
     institutionName: 'Bolgatanga Technical University',
     campusFaculty: '',
@@ -921,6 +926,11 @@ export default function VolunteerPage() {
       return;
     }
 
+    if (recaptchaEnabled && !captchaToken) {
+      setValidationError('Please complete the security challenge before submitting.');
+      return;
+    }
+
     setValidationError('');
     setSubmitting(true);
 
@@ -928,7 +938,10 @@ export default function VolunteerPage() {
       const response = await fetch(apiUrl('/volunteers'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          captchaToken: recaptchaEnabled ? captchaToken : undefined,
+        }),
       });
       const result = await response.json();
 
@@ -1020,6 +1033,12 @@ export default function VolunteerPage() {
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-5">{currentSection.content}</div>
+
+            {recaptchaEnabled && (
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <RecaptchaField siteKey={recaptchaSiteKey} value={captchaToken} onChange={setCaptchaToken} />
+              </div>
+            )}
 
             <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-between sm:gap-4">
               <button

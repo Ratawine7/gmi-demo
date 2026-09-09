@@ -23,7 +23,7 @@ function base64UrlDecode(value: string) {
 function getJwtSecret() {
   const secret = process.env.ADMIN_JWT_SECRET || process.env.ADMIN_API_KEY || '';
   const isPlaceholder = secret === 'change-me' || secret.startsWith('replace-with-');
-  return secret.length >= 32 && !isPlaceholder ? secret : '';
+  return secret.length >= 18 && !isPlaceholder ? secret : '';
 }
 
 function sign(value: string) {

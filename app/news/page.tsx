@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Calendar, User, ArrowRight, Bookmark, Mail } from 'lucide-react';
 import { apiUrl } from '@/lib/apiClient';
+import { getRecaptchaSiteKey, shouldRequireRecaptcha } from '@/lib/recaptcha';
+import RecaptchaField from '@/components/RecaptchaField';
 
 type Article = {
   id: string;
@@ -50,10 +52,13 @@ export default function NewsPage() {
 
   const [articles, setArticles] = useState<Article[]>(fallbackArticles);
   const [email, setEmail] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
   const [subscribeState, setSubscribeState] = useState<{ type: 'idle' | 'loading' | 'success' | 'error'; message: string }>({
     type: 'idle',
     message: '',
   });
+  const recaptchaEnabled = shouldRequireRecaptcha();
+  const recaptchaSiteKey = getRecaptchaSiteKey();
 
   useEffect(() => {
     let active = true;
@@ -88,13 +93,19 @@ export default function NewsPage() {
 
   const handleSubscribe = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (recaptchaEnabled && !captchaToken) {
+      setSubscribeState({ type: 'error', message: 'Please complete the security challenge.' });
+      return;
+    }
+
     setSubscribeState({ type: 'loading', message: '' });
 
     try {
       const response = await fetch(apiUrl('/subscribers'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'news-page' }),
+        body: JSON.stringify({ email, source: 'news-page', captchaToken: recaptchaEnabled ? captchaToken : undefined }),
       });
       const result = await response.json();
 
@@ -197,22 +208,27 @@ export default function NewsPage() {
             Get field reports, programme updates, and impact stories delivered straight to your inbox.
           </p>
 
-          <form onSubmit={handleSubscribe} className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-[#e17c22] focus:bg-white focus:outline-none"
-            />
-            <button
-              type="submit"
-              disabled={subscribeState.type === 'loading'}
-              className="rounded-lg bg-[#e17c22] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {subscribeState.type === 'loading' ? 'Sending...' : 'Subscribe'}
-            </button>
+          <form onSubmit={handleSubscribe} className="mx-auto mt-6 flex max-w-md flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-[#e17c22] focus:bg-white focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={subscribeState.type === 'loading'}
+                className="rounded-lg bg-[#e17c22] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {subscribeState.type === 'loading' ? 'Sending...' : 'Subscribe'}
+              </button>
+            </div>
+            {recaptchaEnabled && (
+              <RecaptchaField siteKey={recaptchaSiteKey} value={captchaToken} onChange={setCaptchaToken} />
+            )}
           </form>
 
           {subscribeState.message && (
