@@ -18,16 +18,23 @@ import adminRoute from '@/routes/admin';
 dotenv.config({ path: ['config/config.env', '.env.local'] });
 
 const app = express();
-const allowedCorsOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const allowedCorsOrigins = [
+  ...(process.env.CORS_ORIGIN || 'http://localhost:3000').split(',').map((origin) => origin.trim()).filter(Boolean),
+  ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+  ...(process.env.VERCEL_BRANCH_URL ? [`https://${process.env.VERCEL_BRANCH_URL}`] : []),
+];
 
 app.use(helmet());
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedCorsOrigins.includes('*') || allowedCorsOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedCorsOrigins.includes('*') ||
+        allowedCorsOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app') ||
+        origin.endsWith('.vercel.dev')
+      ) {
         callback(null, true);
         return;
       }
@@ -35,7 +42,8 @@ app.use(
       callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
@@ -107,5 +115,9 @@ databaseConnect()
     console.error('MongoDB connection failed:', error instanceof Error ? error.message : error);
     process.exit(1);
   });
+  import { randomBytes } from "node:crypto";
+
+const token = randomBytes(32).toString("hex");
+console.log(token);
 
 export default app;
