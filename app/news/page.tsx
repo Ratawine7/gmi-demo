@@ -1,13 +1,24 @@
 // src/app/news/page.tsx
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Calendar, User, ArrowRight, Bookmark } from 'lucide-react';
+import { Calendar, User, ArrowRight, Bookmark, Mail } from 'lucide-react';
+import { apiUrl } from '@/lib/apiClient';
+
+type Article = {
+  id: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  date: string;
+  author: string;
+  category: string;
+};
 
 export default function NewsPage() {
-  // Your structured database array containing the real news items from your layouts
-  const articles = [
+  // Shown until posts are loaded from the database, and as a fallback if none exist yet.
+  const fallbackArticles: Article[] = [
     {
       id: "awakening-consciences",
       title: "Awakening Consciences. Bringing Back Hopes.",
@@ -36,6 +47,68 @@ export default function NewsPage() {
       category: "Water & Health"
     }
   ];
+
+  const [articles, setArticles] = useState<Article[]>(fallbackArticles);
+  const [email, setEmail] = useState('');
+  const [subscribeState, setSubscribeState] = useState<{ type: 'idle' | 'loading' | 'success' | 'error'; message: string }>({
+    type: 'idle',
+    message: '',
+  });
+
+  useEffect(() => {
+    let active = true;
+
+    fetch(apiUrl('/news'))
+      .then((response) => response.json())
+      .then((result) => {
+        if (!active || !result?.success || !Array.isArray(result.data?.items) || result.data.items.length === 0) return;
+
+        setArticles(
+          result.data.items.map((post: Record<string, string>) => ({
+            id: post.slug,
+            title: post.title,
+            excerpt: post.excerpt,
+            image: post.image || '/hero-bg.jpg',
+            date: new Date(post.publishedAt).toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            }),
+            author: post.author,
+            category: post.category,
+          }))
+        );
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleSubscribe = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setSubscribeState({ type: 'loading', message: '' });
+
+    try {
+      const response = await fetch(apiUrl('/subscribers'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'news-page' }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        setSubscribeState({ type: 'error', message: result.error || 'Subscription failed. Please try again.' });
+        return;
+      }
+
+      setEmail('');
+      setSubscribeState({ type: 'success', message: 'You are subscribed. Watch your inbox for updates.' });
+    } catch {
+      setSubscribeState({ type: 'error', message: 'Could not reach the server. Please try again.' });
+    }
+  };
 
   return (
     <div className="w-full bg-[#f5f9f6] pb-16 sm:pb-24">
@@ -110,6 +183,47 @@ export default function NewsPage() {
 
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* 3. NEWSLETTER SUBSCRIPTION */}
+      <section className="mx-auto max-w-3xl px-4 pt-12 sm:px-6 sm:pt-16">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm sm:p-10">
+          <div className="mx-auto mb-4 w-fit rounded-lg bg-[#141753] p-2 text-white">
+            <Mail className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-black uppercase tracking-tight text-[#141753] sm:text-2xl">Subscribe to our newsletter</h2>
+          <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-500 sm:text-sm">
+            Get field reports, programme updates, and impact stories delivered straight to your inbox.
+          </p>
+
+          <form onSubmit={handleSubscribe} className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-[#e17c22] focus:bg-white focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={subscribeState.type === 'loading'}
+              className="rounded-lg bg-[#e17c22] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {subscribeState.type === 'loading' ? 'Sending...' : 'Subscribe'}
+            </button>
+          </form>
+
+          {subscribeState.message && (
+            <p
+              className={`mt-4 text-xs font-semibold ${
+                subscribeState.type === 'success' ? 'text-emerald-600' : 'text-red-600'
+              }`}
+            >
+              {subscribeState.message}
+            </p>
+          )}
         </div>
       </section>
 

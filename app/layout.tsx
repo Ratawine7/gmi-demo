@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   ];
 
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="bg-[#f5f9f6] text-[#141753] min-h-screen flex flex-col antialiased font-sans" suppressHydrationWarning>
 
         {/* Navigation Header */}
@@ -36,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     src="/gmi-logo.jpeg"
                     alt="GMI Logo"
                     fill
+                    sizes="(min-width: 1024px) 80px, (min-width: 640px) 72px, 64px"
                     className="object-contain p-1"
                     priority
                   />
@@ -104,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
             <div className="space-y-4">
               <div className="w-16 h-16 rounded-full overflow-hidden bg-white relative">
-                <Image src="/gmi-logo.jpeg" alt="GMI Logo" fill className="object-contain p-1" />
+                <Image src="/gmi-logo.jpeg" alt="GMI Logo" fill sizes="64px" className="object-contain p-1" />
               </div>
               <p className="leading-relaxed font-medium text-slate-300">GMI Global Vision Foundation</p>
             </div>

@@ -2,6 +2,7 @@
 'use client';
 import React, { useMemo, useState } from 'react';
 import { User, Mail, Heart, Users2, ShieldCheck, CheckCircle2, BadgeCheck } from 'lucide-react';
+import { apiUrl } from '@/lib/apiClient';
 
 const interestOptions = [
   'Leadership Development',
@@ -78,6 +79,7 @@ export default function VolunteerPage() {
   const [membershipId, setMembershipId] = useState(() => generateMembershipId('Bolgatanga Technical University'));
   const [currentStep, setCurrentStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [validationError, setValidationError] = useState('');
   const [formData, setFormData] = useState({
     institutionName: 'Bolgatanga Technical University',
@@ -891,7 +893,7 @@ export default function VolunteerPage() {
 
   const currentSection = steps[currentStep];
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const missingFieldEntries: Array<[keyof typeof formData, { step: number; label: string }]> = [
@@ -920,7 +922,28 @@ export default function VolunteerPage() {
     }
 
     setValidationError('');
-    setSubmitted(true);
+    setSubmitting(true);
+
+    try {
+      const response = await fetch(apiUrl('/volunteers'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        setValidationError(result.error || 'Registration failed. Please try again.');
+        return;
+      }
+
+      setMembershipId(result.data.membershipId);
+      setSubmitted(true);
+    } catch {
+      setValidationError('Could not reach the server. Please check your connection and try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -1019,9 +1042,10 @@ export default function VolunteerPage() {
               ) : (
                 <button
                   type="submit"
-                  className="w-full rounded bg-[#e17c22] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 sm:w-auto"
+                  disabled={submitting}
+                  className="w-full rounded bg-[#e17c22] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                 >
-                  Submit
+                  {submitting ? 'Submitting...' : 'Submit'}
                 </button>
               )}
             </div>
