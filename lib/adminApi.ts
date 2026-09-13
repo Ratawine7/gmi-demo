@@ -7,7 +7,8 @@ export type ApiResult<T> = {
 };
 
 export async function adminRequest<T>(path: string, init?: RequestInit) {
-  const response = await fetch(apiUrl(path), {
+  const url = apiUrl(path);
+  const response = await fetch(url, {
     ...init,
     credentials: 'include',
     headers: {
@@ -16,7 +17,17 @@ export async function adminRequest<T>(path: string, init?: RequestInit) {
     },
   });
 
-  const result = (await response.json().catch(() => ({ success: false, error: 'Invalid server response.' }))) as ApiResult<T>;
+  const responseText = await response.text();
+  let result: ApiResult<T>;
+
+  try {
+    result = responseText
+      ? JSON.parse(responseText) as ApiResult<T>
+      : { success: false, error: `Empty server response (${response.status}).` };
+  } catch {
+    throw new Error(`Invalid server response (${response.status}) from ${url}.`);
+  }
+
   if (!response.ok || !result.success) {
     throw new Error(result.error || 'Request failed.');
   }
