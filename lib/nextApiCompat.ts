@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import type { Request, Response } from 'express';
+import databaseConnect from '@/config/database';
 
-export type NextRouteHandler = (req: any, res: any) => Promise<any> | any;
+export type NextRouteHandler = (req: Request, res: Response) => Promise<unknown> | unknown;
 
 function parseBody(request: NextRequest) {
   const method = request.method.toUpperCase();
@@ -29,11 +31,13 @@ export function makeNextRouteHandler(handler: NextRouteHandler) {
       query[key] = value;
     });
 
+    await databaseConnect();
+
     const cookieEntries = Object.fromEntries(request.cookies.getAll().map((cookie) => [cookie.name, cookie.value]));
     const outgoingCookies = new Map<string, { value: string; options: Record<string, unknown> }>();
     let statusCode = 200;
 
-    const req: any = {
+    const req = {
       method: request.method,
       headers: Object.fromEntries(request.headers.entries()),
       body,
@@ -43,10 +47,10 @@ export function makeNextRouteHandler(handler: NextRouteHandler) {
       get: (headerName: string) => request.headers.get(headerName) ?? undefined,
     };
 
-    const res: any = {
+    const res = {
       status(code: number) {
         statusCode = code;
-        return this;
+        return res;
       },
       json(payload: unknown) {
         const response = NextResponse.json(payload, { status: statusCode });
@@ -64,7 +68,7 @@ export function makeNextRouteHandler(handler: NextRouteHandler) {
             ...options,
           },
         });
-        return this;
+        return res;
       },
       clearCookie(name: string, options: Record<string, unknown> = {}) {
         outgoingCookies.set(name, {
@@ -77,11 +81,11 @@ export function makeNextRouteHandler(handler: NextRouteHandler) {
             ...options,
           },
         });
-        return this;
+        return res;
       },
     };
 
-    const result = await handler(req as never, res as never);
+    const result = await handler(req as unknown as Request, res as unknown as Response);
     if (result instanceof Response) {
       return result;
     }

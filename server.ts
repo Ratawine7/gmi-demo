@@ -115,9 +115,5 @@ databaseConnect()
     console.error('MongoDB connection failed:', error instanceof Error ? error.message : error);
     process.exit(1);
   });
-  import { randomBytes } from "node:crypto";
-
-const token = randomBytes(32).toString("hex");
-console.log(token);
 
 export default app;

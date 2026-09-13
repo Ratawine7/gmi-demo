@@ -1,4 +1,5 @@
 import { makeNextRouteHandler } from '@/lib/nextApiCompat';
-import { registerVolunteer } from '@/controllers/volunteer';
+import { listVolunteers, registerVolunteer } from '@/controllers/volunteer';
 
+export const GET = makeNextRouteHandler(listVolunteers);
 export const POST = makeNextRouteHandler(registerVolunteer);

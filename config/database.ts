@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
 import mongoose, { type Mongoose } from 'mongoose';
+
+dotenv.config({ path: ['config/config.env', '.env.local'] });
 
 type MongooseCache = {
   conn: Mongoose | null;

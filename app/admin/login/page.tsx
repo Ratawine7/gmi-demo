@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LockKeyhole } from 'lucide-react';
+import { Eye, EyeOff, LockKeyhole } from 'lucide-react';
 import { adminRequest } from '@/lib/adminApi';
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -50,7 +51,17 @@ export default function AdminLoginPage() {
           </label>
           <label className="block space-y-1.5 text-xs font-bold uppercase tracking-wider text-slate-500">
             Password
-            <input type="password" required value={password} onChange={(event) => setPassword(event.target.value)} className="w-full rounded-md border border-slate-200 px-3 py-3 text-sm normal-case tracking-normal text-[#141753] outline-none focus:border-[#e17c22]" />
+            <span className="relative block">
+              <input type={showPassword ? 'text' : 'password'} required value={password} onChange={(event) => setPassword(event.target.value)} className="w-full rounded-md border border-slate-200 px-3 py-3 pr-11 text-sm normal-case tracking-normal text-[#141753] outline-none focus:border-[#e17c22]" />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                onClick={() => setShowPassword((isVisible) => !isVisible)}
+                className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-[#141753] focus:outline-none focus:ring-2 focus:ring-[#e17c22]/40"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </span>
           </label>
         </div>
 
