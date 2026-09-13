@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { Request, Response } from 'express';
+import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import databaseConnect from '@/config/database';
 
-export type NextRouteHandler = (req: Request, res: Response) => Promise<unknown> | unknown;
+export type NextRouteHandler = (req: ExpressRequest, res: ExpressResponse) => Promise<unknown> | unknown;
 
 function parseBody(request: NextRequest) {
   const method = request.method.toUpperCase();
@@ -85,7 +85,7 @@ export function makeNextRouteHandler(handler: NextRouteHandler) {
       },
     };
 
-    const result = await handler(req as unknown as Request, res as unknown as Response);
+    const result = await handler(req as unknown as ExpressRequest, res as unknown as ExpressResponse);
     if (result instanceof Response) {
       return result;
     }
